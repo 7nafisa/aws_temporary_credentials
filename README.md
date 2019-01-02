@@ -1,3 +1,5 @@
+## LoginWithCognito
+
 In many cases, we run into an issue where a client application running on users machine needs to access
  AWS services. Here, the client application needs to pass AWS credentials (access key and secret) while accessing
  the APIs. However, those long lasting AWS credentials are too dangerous to hard code in the client application.
