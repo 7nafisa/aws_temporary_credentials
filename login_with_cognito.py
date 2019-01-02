@@ -43,12 +43,12 @@ class LoginWithCognito:
                                             'valid? Please test your user account by logging into the '
                                             'monitoring tool. https://www.fd19.sports.intel.com/')
 
-    def _retrieve_credentials(self, id_token, duration=temp_credential_duration):
+    def _retrieve_credentials(self, id_token, duration):
         """
         Using an identity token from the user pool and AWS identity pool service, this function retrieves a set of
         temporary AWS credentials, that can be used to access AWS services.
         :param id_token: identity token from user pool
-        :param duration: temporary credentials duration, Default is one hour.
+        :param duration: temporary credentials duration.
         :return: a set of temporary AWS credentials
         """
         identity_client = boto3.client('cognito-identity')
@@ -90,16 +90,17 @@ class LoginWithCognito:
                                  aws_token=credentials['temp_session_token'])
         return signer
 
-    def get_temporary_credentials(self, username, password):
+    def get_temporary_credentials(self, username, password, duration=temp_credential_duration):
         """
         To get a set of temporary credentials, this function uses username and password. These credentials will expire
         in twelve hours.
         :param username: as appears in the Cognito user pool
         :param password: as stored in the Cognito user pool
+        :param duration: temporary credentials duration, Default is one hour.
         :return: a dictionary of temporary aws access key id, secret and session token.
         """
         tokens = self._retrieve_tokens(username, password)
-        temp_credentials = self._retrieve_credentials(tokens['id_token'])
+        temp_credentials = self._retrieve_credentials(tokens['id_token'], duration=duration)
         return temp_credentials
 
 
